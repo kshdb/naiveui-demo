@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Naive UI CDN + 命令式弹窗</title>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://unpkg.com/naive-ui"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const { createApp, ref, h, nextTick } = Vue;
+    const {
+      NFlex,
+      NButton,
+      NModal,
+      NCard,
+      NModalProvider,
+      createDiscreteApi,
+    } = naive;
+
+    let modal; // 在挂载后赋值
+
+    const App = {
+      setup() {
+        const showModal1 = ref(false);
+        const showModal2 = ref(false);
+        const showModal3 = ref(false);
+        const showModal4 = ref(false);
+
+        const showDialogPreset = () => {
+          modal.modal.create({
+            title: "Dialog 预设拖拽",
+            draggable: true,
+            preset: "dialog",
+            content: "无意义的内容....",
+          });
+        };
+
+        const showCardPreset = () => {
+          modal.modal.create({
+            title: "Card 预设拖拽",
+            draggable: true,
+            preset: "card",
+            content: "无意义的内容....",
+          });
+        };
+
+        return {
+          showModal1,
+          showModal2,
+          showModal3,
+          showModal4,
+          showDialogPreset,
+          showCardPreset,
+        };
+      },
+      mounted() {
+        // 必须等待 DOM 渲染后再初始化 createDiscreteApi
+        nextTick(() => {
+          modal = naive.createDiscreteApi(["modal"], {
+            // 传入当前 modal provider 的 container
+            // 确保 n-modal-provider 已经在页面上了
+            // 否则内部会找不到 DOM
+            container: document.body,
+          });
+        });
+      },
+      template: `
+        <n-modal-provider>
+          <n-flex>
+            <n-button @click="showModal1 = !showModal1">card 预设</n-button>
+            <n-button @click="showModal2 = !showModal2">dialog 预设</n-button>
+            <n-button @click="showModal3 = !showModal3">无预设</n-button>
+            <n-button @click="showDialogPreset">dialog 预设（命令式 Api）</n-button>
+            <n-button @click="showCardPreset">card 预设（命令式 Api）</n-button>
+            <n-button @click="showModal4 = !showModal4">弹窗嵌套</n-button>
+          </n-flex>
+
+          <n-modal v-model:show="showModal1" title="card 预设拖拽" preset="card" draggable :style="{ width: '800px' }">
+            <div v-for="i in 10" :key="i">无意义的内容...</div>
+          </n-modal>
+
+          <n-modal v-model:show="showModal2" title="dialog 预设拖拽" preset="dialog" draggable :style="{ width: '800px' }">
+            <div v-for="i in 10" :key="i">无意义的内容...</div>
+          </n-modal>
+
+          <n-modal v-model:show="showModal3" title="无预设拖拽" draggable :style="{ width: '800px' }">
+            <template #default="{ draggableClass }">
+              <n-card>
+                <div :class="draggableClass">点我拖拽</div>
+              </n-card>
+            </template>
+          </n-modal>
+
+          <n-modal v-model:show="showModal4" title="嵌套弹窗拖拽" preset="card" :draggable="{ bounds: 'none' }" :style="{ width: '800px' }">
+            <n-button @click="showDialogPreset">再开一个弹窗</n-button>
+          </n-modal>
+        </n-modal-provider>
+      `,
+    };
+
+    createApp(App).use(naive).mount("#app");
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Naive UI UMD Demo</title>
+  <script src="../js/vue.global.js"></script>
+  <script src="../js/naive-ui.js"></script>
+  <script src="../js/tailwindcss.js"></script>
+</head>
+<body>
+  <div id="app">
+    <n-radio-group
+      v-model:value="size"
+      name="left-size"
+      style="margin-bottom: 12px"
+    >
+      <n-radio-button value="small">小</n-radio-button>
+      <n-radio-button value="medium">中</n-radio-button>
+      <n-radio-button value="large">大</n-radio-button>
+    </n-radio-group>
+
+    <n-form
+      ref="formRef"
+      inline
+      :label-width="80"
+      :model="formValue"
+      :rules="rules"
+      :size="size"
+    >
+      <n-form-item label="姓名" path="user.name">
+        <n-input v-model:value="formValue.user.name" placeholder="输入姓名" />
+      </n-form-item>
+      <n-form-item label="年龄" path="user.age">
+        <n-input v-model:value="formValue.user.age" placeholder="输入年龄" />
+      </n-form-item>
+      <n-form-item label="电话号码" path="phone">
+        <n-input v-model:value="formValue.phone" placeholder="电话号码" />
+      </n-form-item>
+      <n-form-item>
+        <n-button @click="handleValidateClick">验证</n-button>
+      </n-form-item>
+    </n-form>
+
+    <pre>{{ JSON.stringify(formValue, null, 2) }}</pre>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+    const {createDiscreteApi} = naive;
+
+    const app = createApp({
+      setup() {
+        const formRef = ref(null);
+        const { message } = createDiscreteApi(["message"]);
+        const formValue = ref({
+          user: {
+            name: "",
+            age: ""
+          },
+          phone: ""
+        });
+        const rules = {
+          user: {
+            name: {
+              required: true,
+              message: "请输入姓名",
+              trigger: "blur"
+            },
+            age: {
+              required: true,
+              message: "请输入年龄",
+              trigger: ["input", "blur"]
+            }
+          },
+          phone: {
+            required: true,
+            message: "请输入电话号码",
+            trigger: ["input"]
+          }
+        };
+        const size = ref("medium");
+        const handleValidateClick=(e) =>{
+          e.preventDefault();
+          formRef.value?.validate((errors) => {
+            if (!errors) {
+              message.success("Valid");
+            } else {
+              console.log(errors);
+              message.error("验证出错");
+            }
+          });
+        }
+
+        return {
+          formRef,
+          formValue,
+          rules,
+          size,
+          handleValidateClick
+        };
+      }
+    });
+
+    app.use(naive);
+    app.mount("#app");
+  </script>
+</body>
+</html>

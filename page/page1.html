@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue树形菜单框架</title>
+    <script src="../js/vue.global.js"></script>
+    <script src="../js/naive-ui.js"></script>
+    <script src="../js/tailwindcss.js"></script>
+   
+<style>
+    .n-layout-header,
+    .n-layout-footer {
+      background: rgba(128, 128, 128, 0.2);
+      padding: 24px;
+    }
+    
+    .n-layout-sider {
+      background: rgba(128, 128, 128, 0.3);
+    }
+    
+    .n-layout-content {
+      background: rgba(128, 128, 128, 0.4);
+    }
+    .carousel-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+    </style>
+</head>
+
+<body >
+    <div id="app" class="bg-white shadow-sm rounded-lg p-1 w-full">
+      <span class="text-[#ff0000]">  111112222</span> 
+
+      <n-config-provider :theme-overrides="themeOverrides" >
+        <n-button>{{ message }}</n-button>
+        <n-button type="primary" dashed>
+            测试按钮
+        </n-button>
+        <n-dropdown trigger="click" :options="options" :show-arrow="true" @select="handleSelect">
+            <n-button>找个地方休息</n-button>
+        </n-dropdown>
+    </n-config-provider>
+
+    <n-space vertical>
+        <n-card title="小卡片" size="small">
+          卡片内容
+        </n-card>
+        <n-card title="中卡片" size="medium">
+          卡片内容
+        </n-card>
+        <n-card title="大卡片" size="large">
+          卡片内容
+        </n-card>
+        <n-card title="超大卡片" size="huge">
+          卡片内容
+        </n-card>
+      </n-space>
+      <n-carousel show-arrow>
+        <img
+          class="carousel-img"
+          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg"
+        >
+        <img
+          class="carousel-img"
+          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg"
+        >
+        <img
+          class="carousel-img"
+          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg"
+        >
+        <img
+          class="carousel-img"
+          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg"
+        >
+      </n-carousel>
+      啊
+  <n-divider title-placement="left">
+    左
+  </n-divider>
+  啊
+  <n-divider title-placement="right">
+    右
+  </n-divider>
+  啊
+  <n-divider dashed>
+    虚线
+  </n-divider>
+  啊
+    </div>
+    <script>
+      const { createApp, ref, onMounted} = Vue;
+
+        const App = {
+            setup() {
+                const message = ref('Hello Vue!')
+                const themeOverrides = {
+                    // common: {
+                    //     primaryColor: '#8a2be2',
+                    //     primaryColorHover: '#8a2be2',
+                    //     primaryColorPressed: '#8a2be2',
+                    //     primaryColorSuppl: '#8a2be2'
+                    // },
+                    Button: {
+                        primaryColor: '#8a2be2',
+                        primaryColorHover: '#8a2be2',
+                        primaryColorPressed: '#8a2be2',
+                        primaryColorSuppl: '#8a2be2',
+                        // textColor: '#8a2be2',
+                        // textColorHover: '#8a2be2',
+                        // textColorPressed: '#8a2be2',
+                        // textColorFocus: '#8a2be2',
+                    },
+                    // Select: {
+                    //     peers: {
+                    //         InternalSelection: {
+                    //             textColor: '#FF0000'
+                    //         }
+                    //     }
+                    // }
+                };
+                const options = [
+                    {
+                        label: '滨海湾金沙，新加坡',
+                        key: 'marina bay sands',
+                        disabled: true
+                    },
+                    {
+                        label: '布朗酒店，伦敦',
+                        key: 'brown\'s hotel, london'
+                    },
+                    {
+                        label: '亚特兰蒂斯巴哈马，拿骚',
+                        key: 'atlantis nahamas, nassau'
+                    },
+                    {
+                        label: '比佛利山庄酒店，洛杉矶',
+                        key: 'the beverly hills hotel, los angeles'
+                    }
+                ];
+                return {
+                    options,
+                    handleSelect: (key) => {
+                        console.log(key)
+                    },
+                    message,
+                    themeOverrides,
+                }
+            }
+        }
+        const app = createApp(App)
+        app.use(naive)
+        app.mount('#app')
+    </script>
+</body>
+
+</html>

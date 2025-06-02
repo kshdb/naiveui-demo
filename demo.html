@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="js/vue.global.js"></script>
+    <script src="js/naive-ui.js"></script>
+    <script src="js/tailwindcss.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <n-config-provider :theme-overrides="themeOverrides">
+            <n-button>{{ message }}</n-button>
+            <n-button type="primary" dashed>
+                测试按钮
+            </n-button>
+            <n-dropdown trigger="click" :options="options" :show-arrow="true" @select="handleSelect">
+                <n-button>找个地方休息</n-button>
+            </n-dropdown>
+        </n-config-provider>
+    </div>
+    <script>
+        const { createApp, ref, onMounted} = Vue;
+        const app= createApp( {
+            setup() {
+                const message = ref('Hello Vue!')
+                const themeOverrides = {
+                    // common: {
+                    //     primaryColor: '#8a2be2',
+                    //     primaryColorHover: '#8a2be2',
+                    //     primaryColorPressed: '#8a2be2',
+                    //     primaryColorSuppl: '#8a2be2'
+                    // },
+                    Button: {
+                        primaryColor: '#8a2be2',
+                        primaryColorHover: '#8a2be2',
+                        primaryColorPressed: '#8a2be2',
+                        primaryColorSuppl: '#8a2be2',
+                        // textColor: '#8a2be2',
+                        // textColorHover: '#8a2be2',
+                        // textColorPressed: '#8a2be2',
+                        // textColorFocus: '#8a2be2',
+                    },
+                    // Select: {
+                    //     peers: {
+                    //         InternalSelection: {
+                    //             textColor: '#FF0000'
+                    //         }
+                    //     }
+                    // }
+                };
+                const options = [
+                    {
+                        label: '滨海湾金沙，新加坡',
+                        key: 'marina bay sands',
+                        disabled: true
+                    },
+                    {
+                        label: '布朗酒店，伦敦',
+                        key: 'brown\'s hotel, london'
+                    },
+                    {
+                        label: '亚特兰蒂斯巴哈马，拿骚',
+                        key: 'atlantis nahamas, nassau'
+                    },
+                    {
+                        label: '比佛利山庄酒店，洛杉矶',
+                        key: 'the beverly hills hotel, los angeles'
+                    }
+                ];
+                return {
+                    options,
+                    handleSelect: (key) => {
+                        console.log(key)
+                    },
+                    message,
+                    themeOverrides,
+                }
+            }
+        })
+        app.use(naive)
+        app.mount('#app')
+    </script>
+</body>
+
+</html>

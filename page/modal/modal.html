@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>表单实例</title>
+    <script src="../../js/vue.global.js"></script>
+    <script src="../../js/naive-ui.js"></script>
+    <script src="../../js/tailwindcss.js"></script>
+    <script src="../../js/axios.js"></script>
+    <script src="../../js/dayjs.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <n-flex>
+            <n-button @click="showModal1 = !showModal1">
+                card 预设
+            </n-button>
+            <n-button @click="showModal2 = !showModal2">
+                dialog 预设
+            </n-button>
+            <n-button @click="showModal3 = !showModal3">
+                无预设
+            </n-button>
+            <n-button @click="showDialogPreset">
+                dialog 预设（命令式 Api）
+            </n-button>
+            <n-button @click="showCardPreset">
+                card 预设（命令式 Api）
+            </n-button>
+            <n-button @click="showModal4 = !showModal4">
+                弹窗嵌套
+            </n-button>
+        </n-flex>
+        <n-modal v-model:show="showModal1" title="card 预设拖拽" preset="card" draggable :style="{ width: '800px' }">
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+        </n-modal>
+        <n-modal v-model:show="showModal2" title="dialog 预设拖拽" preset="dialog" draggable :style="{ width: '800px' }">
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+            <div>无意义的内容...</div>
+        </n-modal>
+        <n-modal v-model:show="showModal3" title="无预设拖拽" draggable :style="{ width: '800px' }">
+            <template #default="{ draggableClass }">
+                <n-card>
+                    <div :class="draggableClass">
+                        点我拖拽
+                    </div>
+                </n-card>
+            </template>
+        </n-modal>
+        <!-- <n-modal v-model:show="showModal4" title="嵌套弹窗拖拽" preset="dialog" :draggable="{ bounds: 'none' }"
+            :style="{ 'width': modalWidth ,'height':modalHeight}">
+            <template #header>
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <span>模态对话框</span>
+                    <i @click="toggleFullScreen"
+                        class="w-[1.3rem] h-[1.3rem] mt-1 p-0.5 border-[#e5e7eb] rounded-[2px] bg-[#e5e7eb]"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m6 6l10 9.9m-10 26L16 32m26 9.9L32.1 32m9.8-26L32 15.9M33 6h9v9m0 18v9h-9m-18 0H6v-9m0-18V6h9" />
+                        </svg></i>
+                </div>
+            </template>
+            <n-button @click="showDialogPreset">
+                再开一个弹窗
+                {{dayTime}}
+            </n-button>
+
+        </n-modal> -->
+
+        <n-modal v-model:show="showModal4" title="嵌套弹窗拖拽" class="custom-card" preset="card" draggable
+            :style="{ 'width': modalWidth ,'height':modalHeight}" size="huge" :bordered="false">
+            <template #header-extra>
+                <i @click="toggleFullScreen"
+                    class="w-[1.4rem] h-[1.4rem] mt-0.5 p-[0.2rem] hover:cursor-pointer hover:bg-[#e5e7eb] border-[#e5e7eb] rounded-[0.2rem] bg-[transparent]"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 48 48">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="3"
+                            d="m6 6l10 9.9m-10 26L16 32m26 9.9L32.1 32m9.8-26L32 15.9M33 6h9v9m0 18v9h-9m-18 0H6v-9m0-18V6h9" />
+                    </svg></i>
+            </template>
+            <n-infinite-scroll :style="{'height':modalContentHeight}" :distance="10" @load="handleLoad">
+                内容开始
+                <n-config-provider :theme-overrides="themeOverrides">
+                    <n-button>{{ message }}</n-button>
+                    <n-button type="primary" dashed>
+                        测试按钮
+                    </n-button>
+                    <n-dropdown trigger="click" :options="options" :show-arrow="true" @select="handleSelect">
+                        <n-button>找个地方休息</n-button>
+                    </n-dropdown>
+                </n-config-provider>
+
+                <n-space vertical>
+                    <n-card title="小卡片" size="small">
+                        卡片内容
+                    </n-card>
+                    <n-card title="中卡片" size="medium">
+                        卡片内容
+                    </n-card>
+                    <n-card title="大卡片" size="large">
+                        卡片内容
+                    </n-card>
+                    <n-card title="超大卡片" size="huge">
+                        卡片内容
+                    </n-card>
+                </n-space>
+                <n-carousel show-arrow>
+                    <img class="carousel-img"
+                        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg">
+                    <img class="carousel-img"
+                        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg">
+                    <img class="carousel-img"
+                        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg">
+                    <img class="carousel-img"
+                        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg">
+                </n-carousel>
+                啊
+                <n-divider title-placement="left">
+                    左
+                </n-divider>
+                啊
+                <n-divider title-placement="right">
+                    右
+                </n-divider>
+                啊
+                <n-divider dashed>
+                    虚线
+                </n-divider>
+                内容结束
+
+            </n-infinite-scroll>
+            <template #footer>
+                尾部
+            </template>
+        </n-modal>
+
+    </div>
+
+    <script>
+        const { createApp, ref, nextTick, onMounted } = Vue;
+        const { createDiscreteApi, useModal } = naive;
+
+
+        const app = createApp({
+            setup() {
+                const modalWidth = ref("80vw")
+                const modalHeight = ref("60vh")
+                const modalContentHeight = ref("50vh")
+                const modal = ref(null); // 在挂载后赋值
+                const message = ref('Hello Vue!')
+                const dayTime = ref('')
+                function showDialogPreset() {
+                    modal.value.create({
+                        title: "Dialog 预设拖拽",
+                        draggable: true,
+                        preset: "dialog",
+                        style: {
+                            width: modalWidth.value,
+                            height: modalHeight.value,
+                        },
+                        content: "无意义的内容...."
+                    });
+                }
+                function showCardPreset() {
+                    modal.value.create({
+                        title: "Card 预设拖拽",
+                        draggable: true,
+                        preset: "card",
+                        style: {
+                            width: modalWidth.value,
+                            height: modalHeight.value,
+                        },
+                        content: "无意义的内容....",
+                    });
+                }
+                const isFullScreen = ref(false);
+
+                const toggleFullScreen = () => {
+                    isFullScreen.value = !isFullScreen.value;
+                    const modal = document.querySelector('.n-modal'); // 获取模态对话框的DOM元素
+                    console.log('走到这里了吗', modal)
+                    if (isFullScreen.value) {
+                        modal.style.position = 'fixed'; // 固定定位
+                        modal.style.top = '0'; // 顶部对齐
+                        modal.style.left = '0'; // 左侧对齐
+                        modal.style.width = '100vw'; // 宽度100%视口宽度
+                        modal.style.height = '100vh'; // 高度100%视口高度
+                        modal.style.zIndex = '9999'; // 确保在最上层
+                        modalWidth.value='100vw';
+                        modalHeight.value='100vh';
+                        modalContentHeight.value='90vh';
+                    } else {
+                        modal.style.position = ''; // 恢复默认定位
+                        modal.style.width = modalWidth.value; // 恢复默认宽度
+                        modal.style.height = modalHeight.value; // 恢复默认高度
+                        modal.style.zIndex = ''; // 恢复默认层级
+                        modalWidth.value='80vw';
+                        modalHeight.value='60vh';
+                        modalContentHeight.value='50vh';
+                    }
+                };
+                const test_axios = () => {
+                    // axios.get('/user?ID=12345')
+                    //     .then(function (response) {
+                    //         console.log(response);
+                    //     })
+                    //     .catch(function (error) {
+                    //         console.log(error);
+                    //     });
+                    //get请求
+                    axios({
+                        method: 'GET',
+                        url: 'https://v2.ywjc6.com/api/captchaImage',
+                        params: { //params参数必写 , 如果没有参数传{}也可以
+                            "aaa": 1,
+                            "listNum": "CG-20210506-001"
+                        }
+                    }).then((res) => {
+                        console.log('GET返回的结果为', res.data)
+                    }).catch((error) => {
+                        console.log('返回异常信息', error);
+                    });
+                }
+                onMounted(() => {
+                    nextTick(() => {
+                        const _modal = createDiscreteApi(["modal"], {
+                            // 传入当前 modal provider 的 container
+                            // 确保 n-modal-provider 已经在页面上了
+                            // 否则内部会找不到 DOM
+                            container: document.body,
+                        });
+                        modal.value = _modal.modal;
+                    });
+                    test_axios()
+                    testDayJs()
+
+                })
+
+                const testDayJs = () => {
+                    dayTime.value = 'aaa-' + dayjs().format()
+                    console.log("sss", dayTime.value)
+                }
+
+                return {
+                    modalWidth,
+                    modalHeight,
+                    modalContentHeight,
+                    modal,
+                    message,
+                    showModal1: ref(false),
+                    showModal2: ref(false),
+                    showModal3: ref(false),
+                    showModal4: ref(false),
+                    showCardPreset,
+                    showDialogPreset,
+                    test_axios,
+                    testDayJs,
+                    dayTime,
+                    toggleFullScreen,
+                };
+            }
+        });
+        app.use(naive);
+        app.mount("#app");
+    </script>
+</body>
+
+</html>

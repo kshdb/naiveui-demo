@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vue树形菜单框架</title>
+    <script src="js/vue.global.js"></script>
+    <script src="js/tailwindcss.js"></script>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial;
+        }
+        .menu-item {
+            padding: 5px 0;
+            cursor: pointer;
+        }
+        .menu-title {
+            padding: 8px 15px;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .menu-title:hover {
+            background: #18a058;
+            color: #ffffff;
+        }
+        .menu-children {
+            padding-left: 15px;
+            overflow: hidden;
+            transition: max-height 0.3s;
+        }
+        .menu-link {
+            display: block;
+            padding: 8px 15px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 2px;
+        }
+        .menu-link:hover {
+            /* background: #d0d0d0; */
+            background: #E7F5EE;
+        }
+        .menu-icon {
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        .menu-icon.rotated {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="app" class="w-full h-full flex">
+        <nav class="w-[15vw] p-[15px] bg-[#f5f5f5]">
+            <i class="fixed bottom-[5vh] left-[14.222vw] z-5000 w-8 h-8 p-1 border-[#999] border-[1px] rounded-[20px] bg-gray-200"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.64645 3.14645C5.45118 3.34171 5.45118 3.65829 5.64645 3.85355L9.79289 8L5.64645 12.1464C5.45118 12.3417 5.45118 12.6583 5.64645 12.8536C5.84171 13.0488 6.15829 13.0488 6.35355 12.8536L10.8536 8.35355C11.0488 8.15829 11.0488 7.84171 10.8536 7.64645L6.35355 3.14645C6.15829 2.95118 5.84171 2.95118 5.64645 3.14645Z" fill="currentColor"></path></svg></i>
+            <h3 class="m-5">系统演示</h3>
+            <div v-for="item in menuData" :key="item.id" class="menu-item">
+                <div @click="toggleMenu(item)" class="menu-title">
+                    <span v-if="item.expanded" class="menu-icon" >
+                        ▼
+                    </span>
+                    <span v-if="!item.expanded" class="menu-icon" :class="{ rotated: item.expanded }">
+                        ▶
+                    </span>
+                    {{ item.title }}
+                </div>
+                <div class="menu-children"
+                    :style="{ maxHeight: item.expanded ? item.children.length * 40 + 'px' : '0' }">
+                    <a v-for="child in item.children" :key="child.id" :href="child.url" class="menu-link"
+                        target="content-frame">
+                        {{ child.title }}
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <main class="w-[85vw] p-1">
+            <iframe class="w-[100%] h-[100%] border-none" frameborder="0" name="content-frame" src="page/page1.html"></iframe>
+        </main>
+    </div>
+    <script>
+        const { createApp, ref, onMounted} = Vue;
+        const app = createApp( {
+            setup() {
+                const message = ref('Hello Vue!')
+                const menuData = ref([
+                    {
+                        id: 1,
+                        title: '产品管理',
+                        expanded: true,
+                        children: [
+                            { id: 11, title: '产品列表', url: 'page/page1.html' },
+                            { id: 12, title: '产品分类', url: 'page/page2.html' }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: '列表功能',
+                        expanded: false,
+                        children: [
+                            { id: 21, title: '订单列表', url: 'page/page3.html' },
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: '表单功能',
+                        expanded: false,
+                        children: [
+                            { id: 22, title: '表单示例1', url: 'page/form/form1.html' },
+                            { id: 23, title: '表单示例2', url: 'page/form/form2.html' },
+                            { id: 24, title: '表单示例3', url: 'page/form/form3.html' },
+                            { id: 25, title: '表单示例4', url: 'page/form/form4.html' },
+                            { id: 26, title: '表单示例5', url: 'page/form/form5.html' },
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: '模态框功能',
+                        expanded: false,
+                        children: [
+                            { id: 22, title: '模态框示例1', url: 'page/modal/modal.html' },
+                        ]
+                    }
+                ]);
+                const toggleMenu = (item) => {
+                    item.expanded = !item.expanded;
+                };
+                return {
+                    menuData,
+                    toggleMenu,
+                }
+            }
+        });
+        app.mount('#app')
+    </script>
+</body>
+</html>

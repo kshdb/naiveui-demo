@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue树形菜单框架</title>
+    <script src="../js/vue.global.js"></script>
+    <script src="../js/naive-ui.js"></script>
+    <script src="../js/tailwindcss.js"></script>
+   
+<style>
+    .n-layout-header,
+    .n-layout-footer {
+      background: rgba(128, 128, 128, 0.2);
+      padding: 24px;
+    }
+    
+    .n-layout-sider {
+      background: rgba(128, 128, 128, 0.3);
+    }
+    
+    .n-layout-content {
+      background: rgba(128, 128, 128, 0.4);
+    }
+    .carousel-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+    </style>
+</head>
+
+<body >
+    <div id="app" class="bg-white shadow-sm rounded-lg p-1 w-full">
+        <n-space vertical>
+            <n-input type="text"  placeholder="Tiny Input" />
+            <n-input type="text" size="small" placeholder="小" />
+            <n-input type="text" placeholder="中" />
+            <n-input type="text" size="large" placeholder="大" />
+          </n-space>
+        <n-watermark
+        content="核心机密"
+        cross
+        selectable
+        :font-size="16"
+        :line-height="16"
+        :width="192"
+        :height="128"
+        :x-offset="12"
+        :y-offset="28"
+        :rotate="-15"
+      >
+        <n-gradient-text type="info">
+            Live Forever
+          </n-gradient-text>
+          <n-gradient-text type="danger">
+            Live Forever
+          </n-gradient-text>
+          <br>
+          <n-gradient-text :size="24" type="warning">
+            Married with Children
+          </n-gradient-text>
+          <br>
+          <n-gradient-text :size="24" type="success">
+            Back in the USSR
+          </n-gradient-text>
+          <n-space>
+            <n-tag> 爱在西元前 </n-tag>
+            <n-tag type="success">
+              不该
+            </n-tag>
+            <n-tag type="warning">
+              超人不会飞
+            </n-tag>
+            <n-tag type="error">
+              手写的从前
+            </n-tag>
+            <n-tag type="info">
+              哪里都是你
+            </n-tag>
+          </n-space>
+
+     
+ 
+  <n-data-table 
+      :columns="[{ title: '名称', key: 'name' }]" 
+      :data="data"
+    ></n-data-table>
+    <n-flex>
+        <n-float-button position="relative" type="primary" menu-trigger="hover">
+          <n-icon>
+            <CashIcon />
+          </n-icon>
+          <template #menu>
+            <n-float-button shape="square" type="primary">
+              <n-icon>
+                <CashIcon />
+              </n-icon>
+            </n-float-button>
+            <n-float-button>
+              <n-icon>
+                <CashIcon />
+              </n-icon>
+            </n-float-button>
+            <n-float-button>
+              <n-icon>
+                <CashIcon />
+              </n-icon>
+            </n-float-button>
+          </template>
+        </n-float-button>
+        <n-float-button position="relative" type="primary" menu-trigger="click">
+          <n-icon>
+            <CashIcon />
+          </n-icon>
+          <template #menu>
+            <n-float-button shape="square" type="primary">
+              <n-icon>
+                <CashIcon />
+              </n-icon>
+            </n-float-button>
+            <n-float-button>
+              <n-icon>
+                <CashIcon />
+              </n-icon>
+            </n-float-button>
+            <n-float-button>
+              <n-icon>
+                <CashIcon />
+              </n-icon>
+            </n-float-button>
+          </template>
+        </n-float-button>
+      </n-flex>
+</n-watermark>
+    </div>
+    <script>
+        const { createApp, ref, onMounted} = Vue;
+        const App = {
+            setup() {
+                const data = [{ name: '静态数据样例1111' }];
+                return {
+                    data,
+                
+                }
+            }
+        }
+        const app = createApp(App)
+        app.use(naive)
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
